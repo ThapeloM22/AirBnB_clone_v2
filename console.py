@@ -21,6 +21,8 @@ class HBNBCommand(cmd.Cmd):
     '''
 
     prompt = ("(hbnb) ")
+    classes = [
+        'BaseModel', 'User', 'Place', 'State', 'City', 'Amenity', 'Review']
 
     def do_quit(self, args):
         '''
@@ -48,6 +50,13 @@ class HBNBCommand(cmd.Cmd):
             new_instance.save()
             print(new_instance.id)
 
+            if args[0] in self.classes:
+                for i, arg in enumerate(args):
+                    if i != 0:
+                        pair = arg.split('=')
+                        setattr(new_instance, pair[0], pair[1])
+                        # setting attributes to instance, no validation
+            new_instance.save()
         except:
             print("** class doesn't exist **")
 

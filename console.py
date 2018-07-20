@@ -13,6 +13,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from models import classes
 
 
 class HBNBCommand(cmd.Cmd):
@@ -21,8 +22,7 @@ class HBNBCommand(cmd.Cmd):
     '''
 
     prompt = ("(hbnb) ")
-    classes = [
-        'BaseModel', 'User', 'Place', 'State', 'City', 'Amenity', 'Review']
+    all_classes = classes
 
     def do_quit(self, args):
         '''
@@ -50,7 +50,7 @@ class HBNBCommand(cmd.Cmd):
             new_instance.save()
             print(new_instance.id)
 
-            if args[0] in self.classes:
+            if args[0] in self.all_classes:
                 for i, arg in enumerate(args):
                     if i != 0:
                         pair = arg.split('=')

@@ -39,7 +39,10 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line):
         """Creates a new instance of a valid class, saves it (to the JSON file)
-        and prints the id, accepts additional attributes-value pairs
+        and prints the id, accepts optional attributes-value pairs
+        (e.g. name="Ohio")
+        Args:
+            line (str): command line user input
         """
         args = shlex.split(line)
         if len(args) == 0:

@@ -57,7 +57,7 @@ class HBNBCommand(cmd.Cmd):
                         pair[1] = pair[1].replace('_', ' ')
                         try:
                             setattr(obj, pair[0], eval(pair[1]))
-                        except SyntaxError:
+                        except (SyntaxError, NameError):
                             setattr(obj, pair[0], pair[1])
             print(obj.id)
             models.storage.save()

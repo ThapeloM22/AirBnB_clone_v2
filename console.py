@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-'''
+"""
     Implementing the console for the HBnB project.
-'''
+"""
 import cmd
 import json
 import shlex

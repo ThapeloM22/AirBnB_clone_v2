@@ -5,6 +5,7 @@
 import cmd
 import json
 import shlex
+import models
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 from models.user import User
@@ -36,29 +37,30 @@ class HBNBCommand(cmd.Cmd):
         '''
         return True
 
-    def do_create(self, args):
+    def do_create(self, line):
         '''
             Create a new instance of class BaseModel and saves it
             to the JSON file.
         '''
+        args = shlex.split(line)
         if len(args) == 0:
             print("** class name missing **")
-            return
-        try:
-            args = shlex.split(args)
-            new_instance = eval(args[0])()
-            new_instance.save()
-            print(new_instance.id)
-
-            if args[0] in self.all_classes:
-                for i, arg in enumerate(args):
-                    if i != 0:
-                        pair = arg.split('=')
-                        setattr(new_instance, pair[0], pair[1])
-                        # setting attributes to instance, no validation
-            new_instance.save()
-        except:
+        elif args[0] not in self.all_classes:
             print("** class doesn't exist **")
+        else:
+            cls = self.all_classes[args[0]]
+            obj = cls()
+            if len(args) > 1:
+                for i in range(1, len(args)):
+                    pair = args[i].split('=')
+                    if len(pair) == 2:
+                        pair[1] = pair[1].replace('_', ' ')
+                        try:
+                            setattr(obj, pair[0], eval(pair[1]))
+                        except SyntaxError:
+                            setattr(obj, pair[0], pair[1])
+            print(obj.id)
+            models.storage.save()
 
     def do_show(self, args):
         '''

@@ -38,10 +38,9 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def do_create(self, line):
-        '''
-            Create a new instance of class BaseModel and saves it
-            to the JSON file.
-        '''
+        """Creates a new instance of a valid class, saves it (to the JSON file)
+        and prints the id, accepts additional attributes-value pairs
+        """
         args = shlex.split(line)
         if len(args) == 0:
             print("** class name missing **")

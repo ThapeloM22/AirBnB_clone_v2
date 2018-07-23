@@ -1,10 +1,11 @@
 #!/usr/bin/python3
-'''
+"""
     Implementing the console for the HBnB project.
-'''
+"""
 import cmd
 import json
 import shlex
+import models
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 from models.user import User
@@ -13,6 +14,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from models import classes
 
 
 class HBNBCommand(cmd.Cmd):
@@ -21,6 +23,7 @@ class HBNBCommand(cmd.Cmd):
     '''
 
     prompt = ("(hbnb) ")
+    all_classes = classes
 
     def do_quit(self, args):
         '''
@@ -34,22 +37,32 @@ class HBNBCommand(cmd.Cmd):
         '''
         return True
 
-    def do_create(self, args):
-        '''
-            Create a new instance of class BaseModel and saves it
-            to the JSON file.
-        '''
+    def do_create(self, line):
+        """Creates a new instance of a valid class, saves it (to the JSON file)
+        and prints the id, accepts optional attributes-value pairs
+        (e.g. name="Ohio")
+        Args:
+            line (str): command line user input
+        """
+        args = shlex.split(line)
         if len(args) == 0:
             print("** class name missing **")
-            return
-        try:
-            args = shlex.split(args)
-            new_instance = eval(args[0])()
-            new_instance.save()
-            print(new_instance.id)
-
-        except:
+        elif args[0] not in self.all_classes:
             print("** class doesn't exist **")
+        else:
+            cls = self.all_classes[args[0]]
+            obj = cls()
+            if len(args) > 1:
+                for i in range(1, len(args)):
+                    pair = args[i].split('=')
+                    if len(pair) == 2:
+                        pair[1] = pair[1].replace('_', ' ')
+                        try:
+                            setattr(obj, pair[0], eval(pair[1]))
+                        except (SyntaxError, NameError):
+                            setattr(obj, pair[0], pair[1])
+            print(obj.id)
+            models.storage.save()
 
     def do_show(self, args):
         '''

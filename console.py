@@ -18,9 +18,9 @@ from models import classes
 
 
 class HBNBCommand(cmd.Cmd):
-    '''
+    """
         Contains the entry point of the command interpreter.
-    '''
+    """
 
     prompt = ("(hbnb) ")
     all_classes = classes

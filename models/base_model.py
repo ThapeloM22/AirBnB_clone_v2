@@ -5,12 +5,22 @@
 import uuid
 from datetime import datetime
 import models
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, DateTime
+import os
+
+
+Base = declarative_base()
 
 
 class BaseModel:
     '''
         Base class for other classes to be used for the duration.
     '''
+    id = Column(String(60), nullable=False, primary_key=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+
     def __init__(self, *args, **kwargs):
         """__init__ method for BaseModel class
         Args:
@@ -26,7 +36,7 @@ class BaseModel:
                     setattr(self, name, value)
         else:
             self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
+            self.created_at = datetime.utcnow()
             self.updated_at = self.created_at
             models.storage.new(self)
 
@@ -48,7 +58,9 @@ class BaseModel:
         '''
             Update the updated_at attribute with new.
         '''
+        print("this has been saved")
         self.updated_at = datetime.now()
+        models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
@@ -59,5 +71,11 @@ class BaseModel:
         cp_dct['__class__'] = self.__class__.__name__
         cp_dct['updated_at'] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
         cp_dct['created_at'] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-
+        cp_dct.pop('_sa_instance_state', None)
         return (cp_dct)
+
+    def delete(self):
+        """
+        to delete the current instance from the storage
+        """
+        models.storage.delete(self)

@@ -20,10 +20,12 @@ class FileStorage:
         obje = {}
         if cls is None:
             return (self.__objects)
-        for key, val in self.__objects.items():
-            if cls.__name__ == val.__class__.__name__:
-                obje[key] = val
-        return (obje)
+        else:
+            cls = models.classes[cls]
+            for key, val in self.__objects.items():
+                if cls.__name__ == val.__class__.__name__:
+                    obje[key] = val
+            return (obje)
 
     def new(self, obj):
         '''

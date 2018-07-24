@@ -132,12 +132,12 @@ class HBNBCommand(cmd.Cmd):
                 objs = models.storage.all(args[0])
                 for key, obj in objs.items():
                     if key.startswith(args[0]):
-                        obj_list.append(obj.__str__())
+                        obj_list.append(obj)
                 print(obj_list)
         else:
             objs = models.storage.all()
             for obj in objs.values():
-                obj_list.append(obj.__str__())
+                obj_list.append(obj)
             print(obj_list)
 
     def do_update(self, args):

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-"""
-"""
+"""DBStorage class that sets up SQLAlchemy and connects with database"""
 import os
 from sqlalchemy import (create_engine)
 from sqlalchemy.orm import sessionmaker
@@ -16,12 +15,14 @@ from models import classes
 
 class DBStorage:
     """
+    DBStorage class
     """
     __engine = None
     __session = None
 
     def __init__self(self):
         """
+        Initializes database connection
         """
         user_name = os.getenv("HBNB_MYSQL_USER")
         pwd = os.getenv("HBNB_MYSQL_PWD")
@@ -32,11 +33,16 @@ class DBStorage:
             'mysql+mysqldb://{}:{}@{}/{}'.format(
                 user_name, pwd, host, db), pool_pre_ping=True)
 
-    if os.getenv("HBNB_ENV") == 'test':
-        Base.metadata.drop_all(bind=self.__engine)
+        if os.getenv("HBNB_ENV") == 'test':
+            Base.metadata.drop_all(bind=self.__engine)
 
     def all(self, cls=None):
         """
+        Retrieves dictionary of objects in database
+        Args:
+            cls (obj): class of objects to be queried
+        Returns:
+            dictionary of objects
         """
         self.__session = sessionmaker(bind=self.__engine)
         session = self.__session()

@@ -11,6 +11,20 @@ class Place(BaseModel, Base):
         Define the class Place that inherits from BaseModel.
     '''
     __tablename__ = "places"
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        reviews = relationship("Review", passive_deletes=True, backref="place")
+    else:
+        @property
+        def reviews(self):
+            """
+            """
+            reviews_dict = models.storage.all(Review)
+            reviews_list = []
+            for review in reviews_dict.values():
+                if review.place_id = self.id:
+                    review_list.append(review)
+            return review
+
     city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     name = Column(String(128), nullable=False)

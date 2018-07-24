@@ -4,6 +4,8 @@
 '''
 from models.base_model import BaseModel, Base
 from sqlalchemy import String, Column, ForeignKey, Integer, Float
+import os
+from sqlalchemy.orm import relationship
 
 
 class Place(BaseModel, Base):
@@ -21,7 +23,7 @@ class Place(BaseModel, Base):
             reviews_dict = models.storage.all(Review)
             reviews_list = []
             for review in reviews_dict.values():
-                if review.place_id = self.id:
+                if review.place_id == self.id:
                     review_list.append(review)
             return review
 

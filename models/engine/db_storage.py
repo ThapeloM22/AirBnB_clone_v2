@@ -2,14 +2,14 @@
 """DBStorage class that sets up SQLAlchemy and connects with database"""
 import os
 from sqlalchemy import (create_engine)
-from sqlalchemy.orm import sessionmaker
-from base_model import Base
-from user import User
-from state import State
-from city import City
-from amenity import Amenity
-from place import Place
-from review import Review
+from sqlalchemy.orm import sessionmaker, scoped_session
+from models.base_model import Base
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 from models import classes
 
 
@@ -20,7 +20,7 @@ class DBStorage:
     __engine = None
     __session = None
 
-    def __init__self(self):
+    def __init__(self):
         """
         Initializes database connection
         """
@@ -44,17 +44,14 @@ class DBStorage:
         Returns:
             dictionary of objects
         """
-        self.__session = sessionmaker(bind=self.__engine)
-        session = self.__session()
-
         objs_dict = {}
         objs = None
 
         if cls:
             if cls in classes:
-                objs = session.query(cls).all()
+                objs = self.__session.query(cls).all()
         else:
-            objs = session.query(
+            objs = self.__session.query(
                 User, State, City, Amenity, Place, Review).all()
         for obj in objs:
             key = '{}.{}'.format(type(obj).__name__, obj.id)

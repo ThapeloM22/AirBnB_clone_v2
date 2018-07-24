@@ -52,7 +52,7 @@ class DBStorage:
                 cls = classes[cls]
                 objs = self.__session.query(cls).all()
         else:
-            objs = self.__session.query(User, State, City).all()
+            objs = self.__session.query(User, State, City, Place).all()
         for obj in objs:
             key = "{}.{}".format(type(obj).__name__, obj.id)
             objs_dict[key] = obj

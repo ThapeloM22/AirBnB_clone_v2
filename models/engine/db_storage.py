@@ -11,7 +11,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 from models import classes
-
+import models
 
 class DBStorage:
     """
@@ -46,15 +46,59 @@ class DBStorage:
         """
         objs_dict = {}
         objs = None
-
+        print(type(cls))
+        print("Finally this all in db storage prints!!!")
         if cls:
             if cls in classes:
+                cls = classes[cls]
                 objs = self.__session.query(cls).all()
         else:
-            objs = self.__session.query(
-                User, State, City, Amenity, Place, Review).all()
+            objs = self.__session.query(User, State, City, Amenity, Place,
+                                        Review).all()
         for obj in objs:
-            key = '{}.{}'.format(type(obj).__name__, obj.id)
+            key = "{}.{}".format(type(obj).__name__, obj.id)
             objs_dict[key] = obj
+        return (objs_dict)
+#        clss = [val for key, val in models.classes.items() if "BaseModel" not in key
+#        if cls is not None:
+#            if isinstance(cls, str):
+#                cls = models.classes[cls]
+#            clss = [cls]
+#        for c in clss:
+#            for ins in self.__session.query(c):
+#                key = "{}.{}".format(c().__class__.__name__, ins.id)
+#                objs_dict[key] = ins
 
-        return objs_dict
+    def new(self, obj):
+        """
+        Creates a query on current db session depending on class name
+        """
+        print("creating a query...")
+        self.__session.add(obj)
+
+    def save(self):
+        """
+        commit all changes of the current db session
+        """
+        print("Session is being saved...")
+        self.__session.commit()
+
+    def delete(self, obj=None):
+        """
+        delete from current db session obj if not none
+        """
+        if obj:
+            self.__session.delete(obj)
+            self.save()
+
+    def reload(self):
+        """
+        create all tb in db
+        create current db session and is thread safe
+        """
+        print("reloading session...")
+        Base.metadata.create_all(self.__engine)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        Session = scoped_session(session_factory)
+        self.__session = Session()

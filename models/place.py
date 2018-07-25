@@ -73,10 +73,20 @@ class Place(BaseModel, Base):
         @property
         def amenities(self):
             """
+            Gets the list of Amenity objects
             """
-            return Place.amenity_ids
+            obj_list = []
+            objs = models.storage.all('Amenity')
+            for amenity in objs.values():
+                if amenity.id in amenity_ids:
+                    obj_list.append(amenity)
+            return obj_list
 
         @amenities.setter
-        def amenities(self):
+        def amenities(self, obj):
             """
+            Sets an amenity to Place
             """
+            if isinstance(obj, Amenity):
+                if self.id == obj.place_id:
+                    self.amenity_ids.append(obj.id)

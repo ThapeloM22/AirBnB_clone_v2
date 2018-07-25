@@ -9,10 +9,12 @@ from sqlalchemy.orm import relationship
 import models
 
 
-place_amenity = Table('association', Base.metadata,
-    Column('place_id', Integer, ForeignKey('places.id')),
-    Column('amenity_id', Integer, ForeignKey('amenities.id'))
-)
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column('place_id', String(60),
+                             ForeignKey('places.id'), nullable=False),
+                      Column('amenity_id', String(60),
+                             ForeignKey('amenities.id'), nullable=False)
+                  )
 
 class Place(BaseModel, Base):
     """class Place
@@ -30,11 +32,12 @@ class Place(BaseModel, Base):
         amenity_ids (list of str): List of amenities.
     """
     __tablename__ = "places"
+
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         reviews = relationship("Review", passive_deletes=True, backref="place")
         amenities = relationship(
-            "Amenity", secondary=place_amenity, viewonly=False)
-
+            "Amenity", secondary=place_amenity,
+            back_populates="place_amenities" viewonly=False)
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         name = Column(String(128), nullable=False)

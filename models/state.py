@@ -30,4 +30,4 @@ class State(BaseModel, Base):
             for city in cities_dict.values():
                 if city.state_id == self.id:
                     cities_list.append(city)
-            return city
+            return cities_list

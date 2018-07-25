@@ -116,7 +116,7 @@ class HBNBCommand(cmd.Cmd):
             del obj_dict[key]
         except KeyError:
             print("** no instance found **")
-        storage.save()
+        models.storage.save()
 
     def do_all(self, line):
         '''
@@ -165,7 +165,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         key = args[0] + "." + args[1]
-        obj_dict = storage.all()
+        obj_dict = models.storage.all()
         try:
             obj_value = obj_dict[key]
         except KeyError:

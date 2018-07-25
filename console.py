@@ -174,26 +174,20 @@ class HBNBCommand(cmd.Cmd):
         '''
         pass
 
-    def do_count(self, args):
+    def do_count(self, line):
         '''
             Counts/retrieves the number of instances.
         '''
-        obj_list = []
-        models.storage.reload()
-        objects = models.storage.all()
-        try:
-            if len(args) != 0:
-                eval(args)
-        except NameError:
-            print("** class doesn't exist **")
-            return
-        for key, val in objects.items():
-            if len(args) != 0:
-                if type(val) is eval(args):
-                    obj_list.append(val)
+        args = shlex.split(line)
+        if len(args) >= 1:
+            if args[0] not in self.all_classes:
+                print("** class doesn't exist **")
             else:
-                obj_list.append(val)
-        print(len(obj_list))
+                objs = models.storage.all(args[0])
+                print(len(objs))
+        else:
+            objs = models.storage.all()
+            print(len(objs))
 
     def default(self, args):
         '''

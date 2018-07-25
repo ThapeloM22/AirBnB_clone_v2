@@ -37,7 +37,7 @@ class Place(BaseModel, Base):
         reviews = relationship("Review", passive_deletes=True, backref="place")
         amenities = relationship(
             "Amenity", secondary=place_amenity,
-            back_populates="place_amenities" viewonly=False)
+            back_populates="place_amenities", viewonly=False)
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         name = Column(String(128), nullable=False)
@@ -66,7 +66,7 @@ class Place(BaseModel, Base):
         def reviews(self):
             """
             """
-            reviews_dict = models.storage.all(Review)
+            reviews_dict = models.storage.all('Review')
             reviews_list = []
             for review in reviews_dict.values():
                 if review.place_id == self.id:

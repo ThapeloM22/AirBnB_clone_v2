@@ -64,32 +64,26 @@ class HBNBCommand(cmd.Cmd):
             print(obj.id)
             models.storage.save()
 
-    def do_show(self, args):
+    def do_show(self, line):
         '''
-            Print the string representation of an instance baed on
+            Print the string representation of an instance based on
             the class name and id given as args.
         '''
-        args = shlex.split(args)
+        args = shlex.split(line)
         if len(args) == 0:
             print("** class name missing **")
-            return
-        if len(args) == 1:
-            print("** instance id missing **")
-            return
-        models.storage.reload()
-        obj_dict = models.storage.all()
-        try:
-            eval(args[0])
-        except NameError:
+        elif args[0] not in self.all_classes:
             print("** class doesn't exist **")
-            return
-        key = args[0] + "." + args[1]
-        key = args[0] + "." + args[1]
-        try:
-            value = obj_dict[key]
-            print(value)
-        except KeyError:
-            print("** no instance found **")
+        elif len(args) == 1:
+            print("** instance id missing **")
+        else:
+            objs = models.storage.all()
+            key = '{}.{}'.format(args[0], args[1])
+            try:
+                obj = objs[key]
+                print(obj)
+            except KeyError:
+                print("** no instance found **")
 
     def do_destroy(self, args):
         '''

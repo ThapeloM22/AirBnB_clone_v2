@@ -58,7 +58,6 @@ class BaseModel:
         '''
             Update the updated_at attribute with new.
         '''
-        print("this has been saved")
         self.updated_at = datetime.now()
         models.storage.new(self)
         models.storage.save()

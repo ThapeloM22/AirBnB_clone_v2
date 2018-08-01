@@ -10,3 +10,4 @@ chown -R ubuntu:ubuntu /data/
 echo "<html><head></head><body>Success</body></html>" > /data/web_static/releases/test/index.html
 sed -i "s/# Only/\n\tlocation \/hbnb_static\/ {\n\t\talias \/data\/web_static\/current\/; \n\t\
 \tautoindex off;\n\t}\n \n\t# Only/" /etc/nginx/sites-available/default
+sudo service nginx restart

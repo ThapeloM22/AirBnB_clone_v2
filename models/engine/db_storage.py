@@ -48,9 +48,9 @@ class DBStorage:
         objs_dict = {}
         objs = None
         if cls:
-            if cls in classes:
+            if type(cls) is str and cls in classes:
                 cls = classes[cls]
-                objs = self.__session.query(cls).all()
+            objs = self.__session.query(cls).all()
         else:
             objs = self.__session.query(User, State, City, Place).all()
         for obj in objs:
@@ -88,3 +88,9 @@ class DBStorage:
                                        expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
+
+    def close(self):
+        """
+        Close session
+        """
+        self.__session.close()

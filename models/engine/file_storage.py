@@ -21,7 +21,8 @@ class FileStorage:
         if cls is None:
             return (self.__objects)
         else:
-            cls = models.classes[cls]
+            if type(cls) is str:
+                cls = models.classes[cls]
             for key, val in self.__objects.items():
                 if cls.__name__ == val.__class__.__name__:
                     obje[key] = val
@@ -72,3 +73,9 @@ class FileStorage:
                 FileStorage.__objects[key] = class_name(**val)
         except FileNotFoundError:
             pass
+
+    def close(self):
+        """
+        Reload objects from JSON file
+        """
+        self.reload()

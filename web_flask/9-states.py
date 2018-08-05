@@ -18,7 +18,8 @@ def list_state_cities(id=None):
         for state in states:
             if state.id == id:
                 states = [state]
-
+        if len(states) != 1:
+            states = []
     return render_template('9-states.html', states=states)
 
 

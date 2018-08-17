@@ -11,8 +11,9 @@ app = Flask(__name__, template_folder='templates')
 @app.route('/states', strict_slashes=False)
 def list_states():
     """view that lists all of the states"""
+    id = None
     states = models.storage.all(State).values()
-    return render_template('9-states.html', states=states)
+    return render_template('9-states.html', states=states, id=id)
 
 
 @app.route('/states/<id>', strict_slashes=False)
@@ -24,7 +25,7 @@ def list_state_cities(id=None):
             states = [state]
     if len(states) != 1:
         states = []
-    return render_template('9-states.html', states=states)
+    return render_template('9-states.html', states=states, id=id)
 
 
 @app.teardown_appcontext

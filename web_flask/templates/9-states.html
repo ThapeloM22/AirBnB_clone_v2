@@ -5,7 +5,7 @@
     </HEAD>
     <BODY>
       {% if id %}
-        {% if states|length > 0 %}
+        {% if states|length == 1 %}
           <H1>State: {{ states.0.name }}</H1>
           <H3>Cities:</H3>
 	  <UL>

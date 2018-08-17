@@ -19,11 +19,13 @@ def list_states():
 @app.route('/states/<id>', strict_slashes=False)
 def list_state_cities(id=None):
     """view that lists all cities by their states"""
+    found = False
     states = models.storage.all(State).values()
     for state in states:
         if state.id == id:
+            found = True
             states = [state]
-    if len(states) != 1:
+    if found is False:
         states = []
     return render_template('9-states.html', states=states, id=id)
 
